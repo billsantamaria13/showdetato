@@ -96,20 +96,51 @@
       </p>
     </div>
 
-    <!-- Carrusel de fotos: las imágenes se cargan dinámicamente desde script.js -->
-    <!-- Sube las fotos con el nombre carrusel_1, carrusel_2 ... carrusel_10      -->
-    <!-- Extensiones soportadas: .jpg · .jpeg · .png                              -->
+    <!-- Carrusel de fotos -->
     <div class="carousel-wrapper animate-on-scroll">
       <div class="carousel" id="carousel">
+        <div class="carousel-track" id="carouselTrack">
 
-        <!-- El track y los dots se construyen solos en script.js -->
-        <div class="carousel-track" id="carouselTrack"></div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_1.jpeg" alt="El Show de Tato – Foto 1" class="carousel-img" />
+            <div class="carousel-caption">El Show de Tato en escena</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_2.jpeg" alt="El Show de Tato – Foto 2" class="carousel-img" />
+            <div class="carousel-caption">Jorge Muñoz y Tato Muñoz</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_3.jpeg" alt="El Show de Tato – Foto 3" class="carousel-img" />
+            <div class="carousel-caption">La Familia T en acción</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_4.jpeg" alt="El Show de Tato – Foto 4" class="carousel-img" />
+            <div class="carousel-caption">El Show de Tato</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_5.jpeg" alt="El Show de Tato – Foto 5" class="carousel-img" />
+            <div class="carousel-caption">El Show de Tato</div>
+          </div>
+          <div class="carousel-slide">
+            <img src="carrusel/carrusel_6.jpeg" alt="El Show de Tato – Foto 6" class="carousel-img" />
+            <div class="carousel-caption">El Show de Tato</div>
+          </div>
 
+        </div>
+
+        <!-- Controles del carrusel -->
         <button class="carousel-btn carousel-btn--prev" id="carouselPrev" aria-label="Anterior">&#8592;</button>
         <button class="carousel-btn carousel-btn--next" id="carouselNext" aria-label="Siguiente">&#8594;</button>
 
-        <div class="carousel-dots" id="carouselDots"></div>
-
+        <!-- Indicadores -->
+        <div class="carousel-dots" id="carouselDots">
+          <button class="carousel-dot active" aria-label="Slide 1"></button>
+          <button class="carousel-dot" aria-label="Slide 2"></button>
+          <button class="carousel-dot" aria-label="Slide 3"></button>
+          <button class="carousel-dot" aria-label="Slide 4"></button>
+          <button class="carousel-dot" aria-label="Slide 5"></button>
+          <button class="carousel-dot" aria-label="Slide 6"></button>
+        </div>
       </div>
     </div>
 

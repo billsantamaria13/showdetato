@@ -8,44 +8,63 @@
    0. FALLBACK DE IMÁGENES
    Si una imagen no carga, prueba automáticamente
    con las otras extensiones: .jpg · .jpeg · .png
+
+   PROBLEMA RAÍZ: El browser carga las imágenes
+   del HTML antes de que este script se ejecute.
+   Si la imagen falla rápido (404), el evento
+   'error' ya disparó y el listener nunca lo
+   captura. Por eso también revisamos img.complete.
 ───────────────────────────────────────────── */
 (function initImageFallback() {
-  const EXTS = ['jpg', 'jpeg', 'png'];
+  // Ahora incluimos mayúsculas porque GitHub Pages distingue mayúsculas de minúsculas
+  const EXTS = ['jpg', 'jpeg', 'png', 'JPG', 'JPEG', 'PNG', 'webp'];
 
   /**
-   * Usa img.src (URL absoluta actual) para saber qué extensión
-   * se está intentando en este momento y probar la siguiente.
+   * Intenta la siguiente extensión disponible.
+   * Usa img.src (URL absoluta actualizada) para
+   * saber qué extensión se está intentando ahora.
    */
   function tryNext(img) {
-    // img.src da la URL completa y actualizada en cada reintento
     const src   = img.src;
     const match = src.match(/^(.*?)\.(\w+)(\?.*)?$/);
     if (!match) return;
 
-    const base       = match[1];          // ruta sin extensión
-    const currentExt = match[2].toLowerCase();
-    const query      = match[3] || '';    // query string si existe
+    const base       = match[1];
+    const currentExt = match[2]; // quitamos toLowerCase para respetar el caso original
+    const query      = match[3] || '';
 
     if (!img._triedExts) img._triedExts = new Set([currentExt]);
 
     const next = EXTS.find(e => !img._triedExts.has(e));
-    if (!next) return; // Ya se probaron .jpg, .jpeg y .png — imagen no encontrada
+    if (!next) return; // Se probaron todas las extensiones — no existe
 
     img._triedExts.add(next);
     img.src = `${base}.${next}${query}`;
   }
 
-  // Adjunta el listener a una imagen (solo una vez)
+  /**
+   * Adjunta el listener de error a una imagen.
+   * CRÍTICO: Si la imagen ya falló antes de que
+   * este script cargara (img.complete = true y
+   * naturalWidth = 0), activa el fallback de
+   * inmediato sin esperar otro evento 'error'.
+   */
   function attachFallback(img) {
     if (img._fallbackAttached) return;
     img._fallbackAttached = true;
+
     img.addEventListener('error', function () { tryNext(this); });
+
+    // ¿Ya falló antes de que el script corriera?
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) {
+      tryNext(img);
+    }
   }
 
-  // Imágenes ya presentes en el DOM
+  // Imágenes ya presentes en el DOM al cargar el script
   document.querySelectorAll('img').forEach(attachFallback);
 
-  // Imágenes añadidas dinámicamente (ej: contenido del carrito)
+  // Imágenes añadidas dinámicamente (carrusel, carrito, etc.)
   new MutationObserver(mutations => {
     mutations.forEach(({ addedNodes }) => {
       addedNodes.forEach(node => {
@@ -125,125 +144,46 @@
 
 
 /* ─────────────────────────────────────────────
-   3. CARRUSEL DINÁMICO – carrusel_1 al carrusel_10
-   Prueba .jpg · .jpeg · .png por cada número.
-   Solo crea slides para las fotos que existan.
+   3. CARRUSEL ESTÁTICO – 6 fotos
 ───────────────────────────────────────────── */
 (function initCarousel() {
-  const track     = document.getElementById('carouselTrack');
-  const dotsCont  = document.getElementById('carouselDots');
-  const prevBtn   = document.getElementById('carouselPrev');
-  const nextBtn   = document.getElementById('carouselNext');
+  const track   = document.getElementById('carouselTrack');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  const dots    = document.querySelectorAll('.carousel-dot');
   if (!track) return;
 
-  const MAX_SLIDES = 10;
-  const EXTS       = ['jpg', 'jpeg', 'png'];
-  let slides       = [];   // srcs de las fotos que cargaron
-  let current      = 0;
+  let current = 0;
+  const total = dots.length;
   let autoplayTimer;
 
-  /* --- Probar una imagen con las 3 extensiones --- */
-  function probeImage(baseSrc) {
-    return new Promise(resolve => {
-      let i = 0;
-      function next() {
-        if (i >= EXTS.length) { resolve(null); return; }  // ninguna extensión funcionó
-        const src = `${baseSrc}.${EXTS[i++]}`;
-        const img = new Image();
-        img.onload  = () => resolve(src);   // encontrada → devuelve el src válido
-        img.onerror = next;                  // falla → prueba la siguiente extensión
-        img.src = src;
-      }
-      next();
-    });
-  }
-
-  /* --- Crear un slide DOM --- */
-  function createSlide(src, num) {
-    const div  = document.createElement('div');
-    div.className = 'carousel-slide';
-
-    const img  = document.createElement('img');
-    img.src    = src;
-    img.alt    = `El Show de Tato – Foto ${num}`;
-    img.className = 'carousel-img';
-
-    const cap  = document.createElement('div');
-    cap.className   = 'carousel-caption';
-    cap.textContent = 'El Show de Tato';
-
-    div.appendChild(img);
-    div.appendChild(cap);
-    return div;
-  }
-
-  /* --- Crear un dot DOM --- */
-  function createDot(idx) {
-    const btn = document.createElement('button');
-    btn.className = `carousel-dot${idx === 0 ? ' active' : ''}`;
-    btn.setAttribute('aria-label', `Slide ${idx + 1}`);
-    btn.addEventListener('click', () => { goTo(idx); resetAutoplay(); });
-    return btn;
-  }
-
-  /* --- Navegar a un slide --- */
-  function goTo(idx) {
-    if (slides.length === 0) return;
-    current = (idx + slides.length) % slides.length;
+  function goTo(index) {
+    current = (index + total) % total;
     track.style.transform = `translateX(-${current * 100}%)`;
-    dotsCont.querySelectorAll('.carousel-dot')
-      .forEach((d, i) => d.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
   }
 
-  function startAutoplay()  { autoplayTimer = setInterval(() => goTo(current + 1), 4000); }
-  function resetAutoplay()  { clearInterval(autoplayTimer); startAutoplay(); }
+  prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); resetAutoplay(); }));
 
-  /* --- Cargar todas las imágenes en paralelo y armar el carrusel --- */
-  async function buildCarousel() {
-    // Probar slots 1..MAX_SLIDES en paralelo (más rápido)
-    const results = await Promise.all(
-      Array.from({ length: MAX_SLIDES }, (_, i) => probeImage(`carrusel_${i + 1}`))
-    );
+  // Soporte táctil (swipe)
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAutoplay(); }
+  });
 
-    // Filtrar los que no cargaron y conservar el orden
-    results.forEach((src, i) => {
-      if (!src) return;                           // foto inexistente → ignorar
-      track.appendChild(createSlide(src, i + 1));
-      dotsCont.appendChild(createDot(slides.length));
-      slides.push(src);
-    });
-
-    // Sin fotos → ocultar toda la sección del carrusel
-    if (slides.length === 0) {
-      const wrapper = document.querySelector('.carousel-wrapper');
-      if (wrapper) wrapper.style.display = 'none';
-      return;
-    }
-
-    // Una sola foto → ocultar controles de navegación
-    if (slides.length === 1) {
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
-      dotsCont.style.display = 'none';
-      return;
-    }
-
-    // Varias fotos → activar controles
-    prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
-    nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
-
-    // Soporte táctil (swipe)
-    let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend',   e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAutoplay(); }
-    });
-
+  // Autoplay cada 4 segundos
+  function startAutoplay() {
+    autoplayTimer = setInterval(() => goTo(current + 1), 4000);
+  }
+  function resetAutoplay() {
+    clearInterval(autoplayTimer);
     startAutoplay();
   }
-
-  buildCarousel();
+  startAutoplay();
 })();
 
 
