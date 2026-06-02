@@ -125,46 +125,125 @@
 
 
 /* ─────────────────────────────────────────────
-   3. CARRUSEL – Foto 1 · 2 · 3
+   3. CARRUSEL DINÁMICO – carrusel_1 al carrusel_10
+   Prueba .jpg · .jpeg · .png por cada número.
+   Solo crea slides para las fotos que existan.
 ───────────────────────────────────────────── */
 (function initCarousel() {
-  const track   = document.getElementById('carouselTrack');
-  const prevBtn = document.getElementById('carouselPrev');
-  const nextBtn = document.getElementById('carouselNext');
-  const dots    = document.querySelectorAll('.carousel-dot');
+  const track     = document.getElementById('carouselTrack');
+  const dotsCont  = document.getElementById('carouselDots');
+  const prevBtn   = document.getElementById('carouselPrev');
+  const nextBtn   = document.getElementById('carouselNext');
   if (!track) return;
 
-  let current = 0;
-  const total = dots.length;
+  const MAX_SLIDES = 10;
+  const EXTS       = ['jpg', 'jpeg', 'png'];
+  let slides       = [];   // srcs de las fotos que cargaron
+  let current      = 0;
   let autoplayTimer;
 
-  function goTo(index) {
-    current = (index + total) % total;
+  /* --- Probar una imagen con las 3 extensiones --- */
+  function probeImage(baseSrc) {
+    return new Promise(resolve => {
+      let i = 0;
+      function next() {
+        if (i >= EXTS.length) { resolve(null); return; }  // ninguna extensión funcionó
+        const src = `${baseSrc}.${EXTS[i++]}`;
+        const img = new Image();
+        img.onload  = () => resolve(src);   // encontrada → devuelve el src válido
+        img.onerror = next;                  // falla → prueba la siguiente extensión
+        img.src = src;
+      }
+      next();
+    });
+  }
+
+  /* --- Crear un slide DOM --- */
+  function createSlide(src, num) {
+    const div  = document.createElement('div');
+    div.className = 'carousel-slide';
+
+    const img  = document.createElement('img');
+    img.src    = src;
+    img.alt    = `El Show de Tato – Foto ${num}`;
+    img.className = 'carousel-img';
+
+    const cap  = document.createElement('div');
+    cap.className   = 'carousel-caption';
+    cap.textContent = 'El Show de Tato';
+
+    div.appendChild(img);
+    div.appendChild(cap);
+    return div;
+  }
+
+  /* --- Crear un dot DOM --- */
+  function createDot(idx) {
+    const btn = document.createElement('button');
+    btn.className = `carousel-dot${idx === 0 ? ' active' : ''}`;
+    btn.setAttribute('aria-label', `Slide ${idx + 1}`);
+    btn.addEventListener('click', () => { goTo(idx); resetAutoplay(); });
+    return btn;
+  }
+
+  /* --- Navegar a un slide --- */
+  function goTo(idx) {
+    if (slides.length === 0) return;
+    current = (idx + slides.length) % slides.length;
     track.style.transform = `translateX(-${current * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    dotsCont.querySelectorAll('.carousel-dot')
+      .forEach((d, i) => d.classList.toggle('active', i === current));
   }
 
-  prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
-  nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
-  dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); resetAutoplay(); }));
+  function startAutoplay()  { autoplayTimer = setInterval(() => goTo(current + 1), 4000); }
+  function resetAutoplay()  { clearInterval(autoplayTimer); startAutoplay(); }
 
-  // Soporte táctil (swipe)
-  let touchStartX = 0;
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAutoplay(); }
-  });
+  /* --- Cargar todas las imágenes en paralelo y armar el carrusel --- */
+  async function buildCarousel() {
+    // Probar slots 1..MAX_SLIDES en paralelo (más rápido)
+    const results = await Promise.all(
+      Array.from({ length: MAX_SLIDES }, (_, i) => probeImage(`carrusel_${i + 1}`))
+    );
 
-  // Autoplay cada 4 segundos
-  function startAutoplay() {
-    autoplayTimer = setInterval(() => goTo(current + 1), 4000);
-  }
-  function resetAutoplay() {
-    clearInterval(autoplayTimer);
+    // Filtrar los que no cargaron y conservar el orden
+    results.forEach((src, i) => {
+      if (!src) return;                           // foto inexistente → ignorar
+      track.appendChild(createSlide(src, i + 1));
+      dotsCont.appendChild(createDot(slides.length));
+      slides.push(src);
+    });
+
+    // Sin fotos → ocultar toda la sección del carrusel
+    if (slides.length === 0) {
+      const wrapper = document.querySelector('.carousel-wrapper');
+      if (wrapper) wrapper.style.display = 'none';
+      return;
+    }
+
+    // Una sola foto → ocultar controles de navegación
+    if (slides.length === 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      dotsCont.style.display = 'none';
+      return;
+    }
+
+    // Varias fotos → activar controles
+    prevBtn.addEventListener('click', () => { goTo(current - 1); resetAutoplay(); });
+    nextBtn.addEventListener('click', () => { goTo(current + 1); resetAutoplay(); });
+
+    // Soporte táctil (swipe)
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend',   e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAutoplay(); }
+    });
+
     startAutoplay();
   }
-  startAutoplay();
+
+  buildCarousel();
 })();
 
 

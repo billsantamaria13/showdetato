@@ -96,41 +96,20 @@
       </p>
     </div>
 
-    <!-- Carrusel de fotos: archivos carrusel_1.jpg / carrusel_2.jpg / carrusel_3.jpg en la raíz -->
+    <!-- Carrusel de fotos: las imágenes se cargan dinámicamente desde script.js -->
+    <!-- Sube las fotos con el nombre carrusel_1, carrusel_2 ... carrusel_10      -->
+    <!-- Extensiones soportadas: .jpg · .jpeg · .png                              -->
     <div class="carousel-wrapper animate-on-scroll">
       <div class="carousel" id="carousel">
-        <div class="carousel-track" id="carouselTrack">
 
-          <!-- Diapositiva 1 -->
-          <div class="carousel-slide">
-            <img src="carrusel_1.jpg" alt="El Show de Tato – Foto 1" class="carousel-img" />
-            <div class="carousel-caption">El Show de Tato en escena</div>
-          </div>
+        <!-- El track y los dots se construyen solos en script.js -->
+        <div class="carousel-track" id="carouselTrack"></div>
 
-          <!-- Diapositiva 2 -->
-          <div class="carousel-slide">
-            <img src="carrusel_2.jpg" alt="El Show de Tato – Foto 2" class="carousel-img" />
-            <div class="carousel-caption">Jorge Muñoz y Tato Muñoz</div>
-          </div>
-
-          <!-- Diapositiva 3 -->
-          <div class="carousel-slide">
-            <img src="carrusel_3.jpg" alt="El Show de Tato – Foto 3" class="carousel-img" />
-            <div class="carousel-caption">La Familia T en acción</div>
-          </div>
-
-        </div>
-
-        <!-- Controles del carrusel -->
         <button class="carousel-btn carousel-btn--prev" id="carouselPrev" aria-label="Anterior">&#8592;</button>
         <button class="carousel-btn carousel-btn--next" id="carouselNext" aria-label="Siguiente">&#8594;</button>
 
-        <!-- Indicadores -->
-        <div class="carousel-dots" id="carouselDots">
-          <button class="carousel-dot active" aria-label="Slide 1"></button>
-          <button class="carousel-dot" aria-label="Slide 2"></button>
-          <button class="carousel-dot" aria-label="Slide 3"></button>
-        </div>
+        <div class="carousel-dots" id="carouselDots"></div>
+
       </div>
     </div>
 
