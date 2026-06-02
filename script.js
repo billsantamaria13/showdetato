@@ -139,7 +139,7 @@
    5. CARRITO DE COMPRA
    Número WhatsApp para modificarlo rápidamente:
 ───────────────────────────────────────────── */
-const WHATSAPP_NUMBER = '573505267000'; // Numero Whatsapp
+const WHATSAPP_NUMBER = '573107681729'; // Numero Whatsapp
 
 // Estado del carrito
 const cart = {};
