@@ -13,34 +13,39 @@
   const EXTS = ['jpg', 'jpeg', 'png'];
 
   /**
-   * Cuando una imagen falla, intenta la siguiente extensión disponible.
-   * Guarda en img._triedExts las que ya probó para no repetir.
+   * Usa img.src (URL absoluta actual) para saber qué extensión
+   * se está intentando en este momento y probar la siguiente.
    */
   function tryNext(img) {
-    const src = img.getAttribute('src') || '';
-    const match = src.match(/\.(\w+)(\?.*)?$/);
+    // img.src da la URL completa y actualizada en cada reintento
+    const src   = img.src;
+    const match = src.match(/^(.*?)\.(\w+)(\?.*)?$/);
     if (!match) return;
 
-    const currentExt = match[1].toLowerCase();
+    const base       = match[1];          // ruta sin extensión
+    const currentExt = match[2].toLowerCase();
+    const query      = match[3] || '';    // query string si existe
+
     if (!img._triedExts) img._triedExts = new Set([currentExt]);
 
     const next = EXTS.find(e => !img._triedExts.has(e));
-    if (!next) return; // Ya se probaron todas las extensiones
+    if (!next) return; // Ya se probaron .jpg, .jpeg y .png — imagen no encontrada
 
     img._triedExts.add(next);
-    img.src = src.replace(new RegExp(`\\.${currentExt}(\\?|$)`, 'i'), `.${next}$1`);
+    img.src = `${base}.${next}${query}`;
   }
 
-  // Aplica el listener a todas las imágenes actuales
+  // Adjunta el listener a una imagen (solo una vez)
   function attachFallback(img) {
     if (img._fallbackAttached) return;
     img._fallbackAttached = true;
     img.addEventListener('error', function () { tryNext(this); });
   }
 
+  // Imágenes ya presentes en el DOM
   document.querySelectorAll('img').forEach(attachFallback);
 
-  // También aplica a imágenes que se agreguen dinámicamente (ej: carrito)
+  // Imágenes añadidas dinámicamente (ej: contenido del carrito)
   new MutationObserver(mutations => {
     mutations.forEach(({ addedNodes }) => {
       addedNodes.forEach(node => {
