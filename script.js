@@ -5,6 +5,55 @@
    ============================================= */
 
 /* ─────────────────────────────────────────────
+   0. FALLBACK DE IMÁGENES
+   Si una imagen no carga, prueba automáticamente
+   con las otras extensiones: .jpg · .jpeg · .png
+───────────────────────────────────────────── */
+(function initImageFallback() {
+  const EXTS = ['jpg', 'jpeg', 'png'];
+
+  /**
+   * Cuando una imagen falla, intenta la siguiente extensión disponible.
+   * Guarda en img._triedExts las que ya probó para no repetir.
+   */
+  function tryNext(img) {
+    const src = img.getAttribute('src') || '';
+    const match = src.match(/\.(\w+)(\?.*)?$/);
+    if (!match) return;
+
+    const currentExt = match[1].toLowerCase();
+    if (!img._triedExts) img._triedExts = new Set([currentExt]);
+
+    const next = EXTS.find(e => !img._triedExts.has(e));
+    if (!next) return; // Ya se probaron todas las extensiones
+
+    img._triedExts.add(next);
+    img.src = src.replace(new RegExp(`\\.${currentExt}(\\?|$)`, 'i'), `.${next}$1`);
+  }
+
+  // Aplica el listener a todas las imágenes actuales
+  function attachFallback(img) {
+    if (img._fallbackAttached) return;
+    img._fallbackAttached = true;
+    img.addEventListener('error', function () { tryNext(this); });
+  }
+
+  document.querySelectorAll('img').forEach(attachFallback);
+
+  // También aplica a imágenes que se agreguen dinámicamente (ej: carrito)
+  new MutationObserver(mutations => {
+    mutations.forEach(({ addedNodes }) => {
+      addedNodes.forEach(node => {
+        if (node.nodeType !== 1) return;
+        if (node.tagName === 'IMG') attachFallback(node);
+        node.querySelectorAll && node.querySelectorAll('img').forEach(attachFallback);
+      });
+    });
+  }).observe(document.body, { childList: true, subtree: true });
+})();
+
+
+/* ─────────────────────────────────────────────
    1. NAVBAR – Scroll y menú mobile
 ───────────────────────────────────────────── */
 (function initNavbar() {
