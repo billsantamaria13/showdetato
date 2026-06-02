@@ -8,10 +8,10 @@
    1. NAVBAR – Scroll y menú mobile
 ───────────────────────────────────────────── */
 (function initNavbar() {
-  const navbar    = document.getElementById('navbar');
-  const toggle    = document.getElementById('navToggle');
-  const navLinks  = document.getElementById('navLinks');
-  const links     = navLinks.querySelectorAll('a');
+  const navbar   = document.getElementById('navbar');
+  const toggle   = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const links    = navLinks.querySelectorAll('a');
 
   // Añadir clase "scrolled" al hacer scroll
   window.addEventListener('scroll', () => {
@@ -22,7 +22,6 @@
   // Menú hamburguesa (mobile)
   toggle.addEventListener('click', () => {
     navLinks.classList.toggle('open');
-    // Animar las líneas del botón
     const spans = toggle.querySelectorAll('span');
     navLinks.classList.contains('open')
       ? (spans[0].style.transform = 'rotate(45deg) translate(5px,5px)',
@@ -81,8 +80,8 @@
   const dots    = document.querySelectorAll('.carousel-dot');
   if (!track) return;
 
-  let current  = 0;
-  const total  = dots.length;
+  let current = 0;
+  const total = dots.length;
   let autoplayTimer;
 
   function goTo(index) {
@@ -124,7 +123,7 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          observer.unobserve(entry.target); // animar solo una vez
+          observer.unobserve(entry.target);
         }
       });
     },
@@ -137,7 +136,7 @@
 
 /* ─────────────────────────────────────────────
    5. CARRITO DE COMPRA
-   Número WhatsApp para modificarlo rápidamente:
+   Número WhatsApp – modifica solo esta línea:
 ───────────────────────────────────────────── */
 const WHATSAPP_NUMBER = '573107681729'; // Numero Whatsapp
 
@@ -160,7 +159,7 @@ function addToCart(name, price) {
   // Feedback visual en el botón
   const allBtns = document.querySelectorAll('.btn--add-cart');
   allBtns.forEach(btn => {
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(name)) {
+    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(name.replace(/'/g, "\\'"))) {
       btn.textContent = '✔ Añadido';
       btn.style.background = 'rgba(0,229,255,0.15)';
       setTimeout(() => {
@@ -173,7 +172,7 @@ function addToCart(name, price) {
 
 /**
  * Cambiar la cantidad de un ítem en el carrito.
- * @param {string} name - Nombre del producto
+ * @param {string} name  - Nombre del producto
  * @param {number} delta - +1 o -1
  */
 function changeQty(name, delta) {
@@ -201,7 +200,7 @@ function renderCart() {
   const count   = document.getElementById('carritoCount');
   const wrapper = document.getElementById('carritoWrapper');
 
-  const items   = Object.entries(cart);
+  const items    = Object.entries(cart);
   const totalQty = items.reduce((acc, [, v]) => acc + v.qty, 0);
   const totalAmt = items.reduce((acc, [, v]) => acc + v.price * v.qty, 0);
 
@@ -217,7 +216,6 @@ function renderCart() {
     return;
   }
 
-  // Resaltar el carrito cuando tiene productos
   wrapper.style.borderColor = 'rgba(0,229,255,0.3)';
 
   lista.innerHTML = items.map(([name, { price, qty }]) => `
@@ -227,9 +225,9 @@ function renderCart() {
         <div class="carrito-item-precio">$${price.toLocaleString('es-CO')} COP c/u</div>
       </div>
       <div class="carrito-item-qty">
-        <button class="qty-btn" onclick="changeQty('${name.replace(/'/g, "\\'")}', -1)" aria-label="Disminuir cantidad">−</button>
+        <button class="qty-btn" onclick="changeQty('${name.replace(/'/g, "\\'")}', -1)" aria-label="Disminuir">−</button>
         <span class="qty-num">${qty}</span>
-        <button class="qty-btn" onclick="changeQty('${name.replace(/'/g, "\\'")}', 1)" aria-label="Aumentar cantidad">+</button>
+        <button class="qty-btn" onclick="changeQty('${name.replace(/'/g, "\\'")}', 1)" aria-label="Aumentar">+</button>
       </div>
       <div class="carrito-item-subtotal">$${(price * qty).toLocaleString('es-CO')}</div>
       <button class="carrito-item-remove" onclick="removeItem('${name.replace(/'/g, "\\'")}');" aria-label="Eliminar ${name}">✕</button>
@@ -262,14 +260,13 @@ function comprarPorWhatsapp() {
     `Por favor indíquenme los detalles de pago y envío. ¡Gracias!`
   );
 
-  // Abrir WhatsApp con el número configurado arriba
+  // Abre WhatsApp con el número configurado arriba
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 }
 
 
 /* ─────────────────────────────────────────────
-   6. EFECTOS DE PARTÍCULAS en el hero (canvas)
-   Discreta lluvia de puntos de luz en el fondo
+   6. PARTÍCULAS en el hero (canvas sutil)
 ───────────────────────────────────────────── */
 (function initParticles() {
   const hero = document.querySelector('.bienvenida-hero');
@@ -302,7 +299,7 @@ function comprarPorWhatsapp() {
     };
   }
 
-  function initParticles() {
+  function init() {
     resize();
     particles = Array.from({ length: 80 }, mkParticle);
   }
@@ -333,6 +330,6 @@ function comprarPorWhatsapp() {
     });
   });
 
-  initParticles();
+  init();
   draw();
 })();

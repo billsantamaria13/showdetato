@@ -22,7 +22,7 @@
   --clr-accent-2:  #e040fb;
   --clr-accent-3:  #00e5ff;
 
-  /* Gradiente de acento */
+  /* Gradientes */
   --grad-accent: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-2));
   --grad-glow:   linear-gradient(135deg, #7c4dff55, #e040fb33);
 
@@ -219,7 +219,7 @@ ul {
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
 }
 
@@ -228,7 +228,7 @@ ul {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 1px 0 var(--clr-border), 0 8px 32px rgba(0,0,0,0.4);
-  padding: 0.6rem 0;
+  padding: 0.5rem 0;
 }
 
 .nav-container {
@@ -241,27 +241,26 @@ ul {
   gap: 2rem;
 }
 
+/* ── Logo navbar – tamaño controlado ── */
 .nav-logo {
-  font-family: var(--ff-display);
-  font-size: 1.6rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--clr-text);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   transition: opacity 0.2s;
 }
 .nav-logo:hover { opacity: 0.85; }
 
-.logo-t {
-  background: var(--grad-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: 2rem;
+.nav-logo-img {
+  height: 38px;        /* Ajusta este valor si el logo necesita más/menos altura */
+  width: auto;
+  max-width: 160px;    /* Evita que se expanda demasiado en horizontal */
+  display: block;
+  object-fit: contain;
+  transition: opacity 0.2s, transform 0.25s var(--ease-bounce);
 }
-.logo-show {
-  color: var(--clr-text-muted);
-  font-weight: 400;
-  font-size: 1.1rem;
+.nav-logo:hover .nav-logo-img {
+  opacity: 0.85;
+  transform: scale(1.04);
 }
 
 .nav-links {
@@ -338,12 +337,11 @@ ul {
   padding-top: 0;
 }
 
-/* Hero con imagen */
-/* Hero con imagen */
+/* Hero con imagen – más alto y vertical */
 .bienvenida-hero {
   position: relative;
-  min-height: 100svh;
-  height: clamp(600px, 95vh, 1080px);
+  min-height: 100svh;                    /* svh ignora la barra del navegador en móvil */
+  height: clamp(600px, 95vh, 1080px);   /* Altura generosa en escritorio */
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -355,15 +353,15 @@ ul {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
+  object-position: center center;        /* Imagen centrada verticalmente */
   filter: brightness(0.5);
   transform: scale(1.03);
   animation: heroZoom 12s ease-in-out infinite alternate;
 }
 
 @keyframes heroZoom {
-  from { transform: scale(1.05); }
-  to   { transform: scale(1.12); }
+  from { transform: scale(1.03); }
+  to   { transform: scale(1.10); }
 }
 
 .bienvenida-overlay {
@@ -955,21 +953,26 @@ ul {
   z-index: 2;
 }
 
+/* ── Imagen real del producto ── */
 .producto-img-wrap {
   background: var(--clr-surface-2);
-  height: 180px;
+  height: 220px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.producto-img-placeholder {
-  font-size: 5rem;
-  filter: drop-shadow(0 0 20px rgba(124,77,255,0.4));
-  transition: transform 0.4s var(--ease-bounce);
+.producto-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s var(--ease-smooth);
 }
-.producto-card:hover .producto-img-placeholder {
-  transform: scale(1.15) rotate(-4deg);
+.producto-card:hover .producto-img {
+  transform: scale(1.07);
 }
 
 .producto-info {
@@ -1173,10 +1176,19 @@ ul {
   gap: 1rem;
 }
 
+/* Logo del footer – pequeño y centrado */
 .footer-logo {
-  font-family: var(--ff-display);
-  font-size: 1.8rem;
-  font-weight: 800;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-logo-img {
+  height: 50px;           /* Altura controlada */
+  width: auto;
+  max-width: 180px;       /* No se expande demasiado */
+  display: block;
+  object-fit: contain;
+  opacity: 0.9;
 }
 
 .footer-tagline {

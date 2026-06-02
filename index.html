@@ -21,8 +21,9 @@
   ============================================== -->
   <nav id="navbar">
     <div class="nav-container">
+      <!-- Logo: archivo logo.png en la raíz del proyecto -->
       <a href="#bienvenida" class="nav-logo">
-        <img src="logo.jpeg" alt="El Show de Tato" class="nav-logo-img" />
+        <img src="logo.png" alt="El Show de Tato" class="nav-logo-img" />
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
         <span></span><span></span><span></span>
@@ -41,7 +42,7 @@
   ============================================== -->
   <section id="bienvenida" class="section section--bienvenida">
 
-    <!-- Imagen principal de bienvenida -->
+    <!-- Imagen principal de bienvenida: archivo bienvenida.jpg en la raíz -->
     <div class="bienvenida-hero" id="bienvenidaHero">
       <img
         src="bienvenida.jpg"
@@ -50,7 +51,7 @@
         loading="eager"
       />
       <div class="bienvenida-overlay">
-        <div class="bienvenida-badge animate-fade-up">El Mico más divertido e irreverente de latino   América</div>
+        <div class="bienvenida-badge animate-fade-up">El Mico más divertido e irreverente de latino América</div>
         <h1 class="bienvenida-title animate-fade-up delay-1">El Show de <span class="highlight">Tato</span></h1>
         <p class="bienvenida-sub animate-fade-up delay-2">Con el ventrílocuo <strong>Jorge Muñoz</strong></p>
       </div>
@@ -95,7 +96,7 @@
       </p>
     </div>
 
-    <!-- Carrusel de fotos -->
+    <!-- Carrusel de fotos: archivos carrusel_1.jpg / carrusel_2.jpg / carrusel_3.jpg en la raíz -->
     <div class="carousel-wrapper animate-on-scroll">
       <div class="carousel" id="carousel">
         <div class="carousel-track" id="carouselTrack">
@@ -250,7 +251,7 @@
         <ul class="servicio-list">
           <li>Show exclusivo para mayores de edad</li>
           <li>Humor adulto, dinámico e irreverente</li>
-          <li>Perfecto para fiestas empresariales o de amigos y discotecas</li>
+          <li>Perfecto para fiestas empresariales, amigos y discotecas</li>
         </ul>
       </div>
 
@@ -362,21 +363,22 @@
     </div>
 
     <!-- Grid de productos -->
+    <!-- Imágenes en la carpeta img/ del proyecto -->
     <div class="tienda-grid container">
 
       <!-- Producto 1: Abrazables -->
       <div class="producto-card animate-on-scroll" id="prod-abrazables">
         <div class="producto-badge">Bestseller</div>
         <div class="producto-img-wrap">
-          <div class="producto-img-placeholder">🧸</div>
+          <img src="img/abrazables.jpeg" alt="Abrazables de Tato" class="producto-img" />
         </div>
         <div class="producto-info">
           <h3 class="producto-nombre">Abrazables de Tato</h3>
           <p class="producto-desc">El peluche oficial de Tato, suave, adorable y perfecto para coleccionar o regalar.</p>
-          <div class="producto-precio">$60.000 <span class="precio-moneda">COP</span></div>
+          <div class="producto-precio">$100.000 <span class="precio-moneda">COP</span></div>
           <button
             class="btn btn--add-cart"
-            onclick="addToCart('Abrazable de Tato', 60000)"
+            onclick="addToCart('Abrazable de Tato', 100000)"
             id="btn-abrazable"
             aria-label="Añadir Abrazable al carrito"
           >
@@ -385,59 +387,79 @@
         </div>
       </div>
 
-      <!-- Producto 2: Pines -->
-      <div class="producto-card animate-on-scroll delay-1" id="prod-pines">
+      <!-- Producto 2: Tatiteres -->
+      <div class="producto-card animate-on-scroll delay-1" id="prod-tatiteres">
         <div class="producto-img-wrap">
-          <div class="producto-img-placeholder">📌</div>
+          <img src="img/tatiteres.jpeg" alt="Tatiteres de Tato" class="producto-img" />
         </div>
         <div class="producto-info">
-          <h3 class="producto-nombre">Pines de Tato</h3>
-          <p class="producto-desc">Pines metálicos con el diseño icónico de Tato, ideales para tu ropa, mochila o accesorio favorito.</p>
-          <div class="producto-precio">$20.000 <span class="precio-moneda">COP</span></div>
+          <h3 class="producto-nombre">Tatiteres</h3>
+          <p class="producto-desc">Los títeres oficiales de La Familia T, ideales para jugar, coleccionar y recrear tus momentos favoritos del show.</p>
+          <div class="producto-precio">$60.000 <span class="precio-moneda">COP</span></div>
           <button
             class="btn btn--add-cart"
-            onclick="addToCart('Pin de Tato', 20000)"
-            id="btn-pin"
-            aria-label="Añadir Pin al carrito"
+            onclick="addToCart('Tatitere de Tato', 60000)"
+            id="btn-tatitere"
+            aria-label="Añadir Tatitere al carrito"
           >
             + Añadir al carrito
           </button>
         </div>
       </div>
 
-      <!-- Producto 3: Mini Tatos -->
-      <div class="producto-card animate-on-scroll delay-2" id="prod-mini">
-        <div class="producto-badge">Edición limitada</div>
+      <!-- Producto 3: Morrales -->
+      <div class="producto-card animate-on-scroll delay-2" id="prod-morrales">
+        <div class="producto-badge">Nuevo</div>
         <div class="producto-img-wrap">
-          <div class="producto-img-placeholder">🎭</div>
+          <img src="img/morrales.jpg" alt="Morral de Tato" class="producto-img" />
         </div>
         <div class="producto-info">
-          <h3 class="producto-nombre">Mini Tatos</h3>
-          <p class="producto-desc">Figura coleccionable en miniatura. El detalle perfecto para fans y coleccionistas de El Show de Tato.</p>
-          <div class="producto-precio">$50.000 <span class="precio-moneda">COP</span></div>
+          <h3 class="producto-nombre">Morral de Tato</h3>
+          <p class="producto-desc">Morral oficial con el diseño exclusivo de El Show de Tato. Cómodo, resistente y con estilo único para los verdaderos fans.</p>
+          <div class="producto-precio">$120.000 <span class="precio-moneda">COP</span></div>
           <button
             class="btn btn--add-cart"
-            onclick="addToCart('Mini Tato', 50000)"
-            id="btn-mini"
-            aria-label="Añadir Mini Tato al carrito"
+            onclick="addToCart('Morral de Tato', 120000)"
+            id="btn-morral"
+            aria-label="Añadir Morral al carrito"
           >
             + Añadir al carrito
           </button>
         </div>
       </div>
 
-      <!-- Producto 4: Mensajes Personalizados -->
-      <div class="producto-card animate-on-scroll" id="prod-mensajes">
+      <!-- Producto 4: Gorras -->
+      <div class="producto-card animate-on-scroll" id="prod-gorras">
         <div class="producto-img-wrap">
-          <div class="producto-img-placeholder">🎤</div>
+          <img src="img/gorras.jpeg" alt="Gorra de Tato" class="producto-img" />
+        </div>
+        <div class="producto-info">
+          <h3 class="producto-nombre">Gorra de Tato</h3>
+          <p class="producto-desc">Gorra oficial del Show de Tato. Úsala con orgullo y muestra que eres parte de La Familia T donde vayas.</p>
+          <div class="producto-precio">$40.000 <span class="precio-moneda">COP</span></div>
+          <button
+            class="btn btn--add-cart"
+            onclick="addToCart('Gorra de Tato', 40000)"
+            id="btn-gorra"
+            aria-label="Añadir Gorra al carrito"
+          >
+            + Añadir al carrito
+          </button>
+        </div>
+      </div>
+
+      <!-- Producto 5: Mensajes Personalizados -->
+      <div class="producto-card animate-on-scroll delay-1" id="prod-mensajes">
+        <div class="producto-img-wrap">
+          <img src="img/mensajes.jpeg" alt="Mensajes Personalizados de Tato" class="producto-img" />
         </div>
         <div class="producto-info">
           <h3 class="producto-nombre">Mensajes Personalizados</h3>
-          <p class="producto-desc">¡Tato te manda un saludo! Grabación personalizada para cumpleaños, regalos, invitaciones y más.</p>
-          <div class="producto-precio">$30.000 <span class="precio-moneda">COP</span></div>
+          <p class="producto-desc">¡Tato te manda un saludo! Grabación personalizada para cumpleaños, regalos, invitaciones y cualquier ocasión especial.</p>
+          <div class="producto-precio">$50.000 <span class="precio-moneda">COP</span></div>
           <button
             class="btn btn--add-cart"
-            onclick="addToCart('Mensaje Personalizado de Tato', 30000)"
+            onclick="addToCart('Mensaje Personalizado de Tato', 50000)"
             id="btn-mensaje"
             aria-label="Añadir Mensaje Personalizado al carrito"
           >
@@ -486,10 +508,11 @@
   ============================================== -->
   <footer class="footer">
     <div class="footer-inner container">
-     <div class="footer-logo">
-        <img src="logo.jpeg" alt="El Show de Tato" class="footer-logo-img" />
+      <!-- Logo del footer: mismo archivo logo.png -->
+      <div class="footer-logo">
+        <img src="logo.png" alt="El Show de Tato" class="footer-logo-img" />
       </div>
-      <img src="logo.jpeg" alt="El Show de Tato" class="footer-logo-img" />
+      <p class="footer-tagline">Elenco oficial · Sábados Felices · Caracol Televisión</p>
       <div class="footer-links">
         <a href="#bienvenida">Bienvenida</a>
         <a href="#quienes-somos">¿Quiénes somos?</a>
