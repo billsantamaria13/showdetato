@@ -529,7 +529,7 @@ ul {
 
 /* Carrusel */
 .carousel-wrapper {
-  max-width: 900px;
+  max-width: 550px; /* Más estrecho para fotos verticales */
   margin: 0 auto 4rem;
   padding: 0 clamp(1rem, 4vw, 2.5rem);
 }
@@ -553,9 +553,10 @@ ul {
 
 .carousel-img {
   width: 100%;
-  height: clamp(280px, 50vw, 520px);
+  aspect-ratio: 4 / 5; /* Proporción vertical perfecta (estilo Instagram) */
+  max-height: 80vh; /* Para que nunca sea más alta que la pantalla del PC */
   object-fit: cover;
-  object-position: center;
+  object-position: top center; /* Para que no corte las cabezas */
   filter: brightness(0.9);
 }
 
