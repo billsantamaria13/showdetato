@@ -138,7 +138,7 @@
    5. CARRITO DE COMPRA
    Número WhatsApp – modifica solo esta línea:
 ───────────────────────────────────────────── */
-const WHATSAPP_NUMBER = '573107681729'; // Numero Whatsapp
+const WHATSAPP_NUMBER = '573153593060'; // Numero Whatsapp
 
 // Estado del carrito
 const cart = {};
