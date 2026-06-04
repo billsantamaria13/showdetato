@@ -447,7 +447,7 @@ ul {
 
 /* Intro text */
 .bienvenida-intro {
-  padding: var(--section-pad) clamp(1rem, 4vw, 2.5rem);
+  padding: 0 clamp(1rem, 4vw, 2.5rem) 2rem;
 }
 
 .bienvenida-intro-inner {
@@ -917,7 +917,7 @@ ul {
 
 .tienda-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Más anchas, máximo 3 por fila en PC */
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
@@ -957,7 +957,7 @@ ul {
 /* ── Imagen real del producto ── */
 .producto-img-wrap {
   background: var(--clr-surface-2);
-  height: 220px;
+  aspect-ratio: 4 / 5; /* Proporción vertical tipo póster */
   overflow: hidden;
   display: flex;
   align-items: center;
