@@ -225,13 +225,15 @@
       <div class="video-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 900px; margin: 0 auto; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--clr-border); background: #000;">
         <!-- Si tu video está en YouTube, cambia 'TU_ID_AQUI' por las letras del final del link de tu video. 
              Si es un archivo .mp4, borra este iframe y usa la etiqueta <video src="tu-video.mp4" controls></video> -->
-        <iframe 
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
-          src="https://www.youtube.com/embed/AQUI_VA_EL_ID_DEL_VIDEO" 
-          title="Video El Show de Tato" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
+        <a href="https://www.youtube.com/watch?v=Ml22zWSZaKU" target="_blank" rel="noopener" style="display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; text-decoration: none;">
+          <!-- Miniatura del video sacada automáticamente de YouTube -->
+          <img src="https://img.youtube.com/vi/Ml22zWSZaKU/maxresdefault.jpg" alt="Ver video de El Show de Tato" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75);" />
+          
+          <!-- Botón de Play falso sobre la miniatura -->
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: rgba(255,0,0,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <div style="width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 25px; border-color: transparent transparent transparent #ffffff; margin-left: 8px;"></div>
+          </div>
+        </a>
       </div>
     </div>
   </section>
